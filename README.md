@@ -14,11 +14,11 @@ Optimization-based reconstruction method
 <br>
 Solves inverse problem: **y = Ax + ε**
    <br>
-   *y: The noisy sinogram (raw data).
+   {*y: The noisy sinogram (raw data).
    <br>
    *A: The Radon transform (forward projection).
    <br>
-   *ε: Noise
+   *ε: Noise}
 <br>
 Promotes smooth and noise free images while preserving edges
 <br>
