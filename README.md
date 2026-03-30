@@ -4,15 +4,20 @@
 <br>
 This project focuses on enhancing low-dose CT images using advanced reconstruction techniques on the LoDoPaB-CT dataset.
 <br>
-* Total Variation  Regularization
+Total Variation  Regularization
 <br>
-* Learned Primal-Dual  Reconstruction
+Learned Primal-Dual  Reconstruction
 
 ## Methods used
 ### **1)Total Variation Regularization:**
 Optimization-based reconstruction method
 <br>
 Solves inverse problem: **y = Ax + ε**
+   *y: The noisy sinogram (raw data).
+   <br>
+   *A: The Radon transform (forward projection).
+   <br>
+   *\epsilon: Noise
 <br>
 Promotes smooth and noise free images while preserving edges
 <br>
