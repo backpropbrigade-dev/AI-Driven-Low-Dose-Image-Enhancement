@@ -1,5 +1,5 @@
 # AI Driven Low Dose Image Enhancement
-<br>
+
 ## Overview
 <br>
 This project focuses on enhancing low-dose CT images using advanced reconstruction techniques on the LoDoPaB-CT dataset.
