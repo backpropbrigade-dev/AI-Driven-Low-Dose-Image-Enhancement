@@ -1,0 +1,6 @@
+========== Validation Mean Metrics ==========
+PSNR: 36.9281
+SSIM: 0.8844
+MSE:  0.000115
+MAE:  0.006922
+Num slices evaluated: 3522

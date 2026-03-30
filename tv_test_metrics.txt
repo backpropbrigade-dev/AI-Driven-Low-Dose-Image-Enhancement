@@ -1,0 +1,6 @@
+Mean TV Reconstruction Metrics (all files and slices)
+==================================================
+PSNR: 31.424458
+SSIM: 0.781537
+MSE: 0.000322
+MAE: 0.010781

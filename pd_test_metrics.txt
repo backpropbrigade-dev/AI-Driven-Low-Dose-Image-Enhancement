@@ -1,0 +1,6 @@
+========== Test Mean Metrics ==========
+PSNR: 36.0520
+SSIM: 0.8500
+MSE:  0.000210
+MAE:  0.008685
+Num slices evaluated: 3553
