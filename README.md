@@ -9,7 +9,23 @@ Total Variation  Regularization
 Learned Primal-Dual  Reconstruction
 
 ## Methods used
-### **1)Total Variation Regularization:**
+### **1)1. Filtered Back Projection:**
+This is the classical, non-AI standard. When a CT scanner takes X-rays from different angles, it creates a "sinogram." FBP is the mathematical algorithm used to "smear" those X-rays back across a grid to reconstruct the 2D image.
+<br>
+Signal Processing / Medical Physics.
+<br>
+The Math: It uses the Radon Transform. It’s fast and predictable but creates "noisy" images if the X-ray dose is low. 
+<br>
+### **2)Total Variation Regularization:**
+This belongs to Iterative Reconstruction. Instead of a single mathematical formula (like FBP), this treats reconstruction as an optimization problem.
+<br>
+It is used for Mathematical Optimization / Computer Vision.
+<br>
+The Logic: It assumes that real-world images are "piecewise constant" (smooth areas with sharp edges). It tries to find an image that matches the scan data while 
+minimizing "Total Variation" (noise).
+<br>
+Role in AI: It was the precursor to AI; it’s a "hand-crafted" rule rather than a learned one.
+<br>
 Optimization-based reconstruction method
 <br>
 Solves inverse problem: **y = Ax + ε**
@@ -24,7 +40,7 @@ Promotes smooth and noise free images while preserving edges
 <br>
 Implemented using iterative optimization
 
-### **2)Learned Primal Dual:** 
+### **3)Learned Primal Dual:** 
 Deep learning-based iterative reconstruction method
 <br>
 Combines physics-based forward model with CNN updates
