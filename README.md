@@ -2,33 +2,33 @@
 
 ## Overview
 <br>
-This project focuses on enhancing low-dose CT images using advanced reconstruction techniques on the LoDoPaB-CT dataset.
+*This project focuses on enhancing low-dose CT images using advanced reconstruction techniques on the LoDoPaB-CT dataset.
 <br>
-Total Variation  Regularization
+*Total Variation  Regularization
 <br>
-Learned Primal-Dual  Reconstruction
+*Learned Primal-Dual  Reconstruction
 
 ## Methods used
 ### **1)1. Filtered Back Projection:**
-This is the classical, non-AI standard. When a CT scanner takes X-rays from different angles, it creates a "sinogram." FBP is the mathematical algorithm used to "smear" those X-rays back across a grid to reconstruct the 2D image.
+*This is the classical, non-AI standard. When a CT scanner takes X-rays from different angles, it creates a "sinogram." FBP is the mathematical algorithm used to "smear" those X-rays back across a grid to reconstruct the 2D image.
 <br>
-Signal Processing / Medical Physics.
+*Signal Processing / Medical Physics.
 <br>
-The Math: It uses the Radon Transform. It’s fast and predictable but creates "noisy" images if the X-ray dose is low. 
+*The Math: It uses the Radon Transform. It’s fast and predictable but creates "noisy" images if the X-ray dose is low. 
 <br>
 ### **2)Total Variation Regularization:**
-This belongs to Iterative Reconstruction. Instead of a single mathematical formula (like FBP), this treats reconstruction as an optimization problem.
+*This belongs to Iterative Reconstruction. Instead of a single mathematical formula (like FBP), this treats reconstruction as an optimization problem.
 <br>
-It is used for Mathematical Optimization / Computer Vision.
+*It is used for Mathematical Optimization / Computer Vision.
 <br>
-The Logic: It assumes that real-world images are "piecewise constant" (smooth areas with sharp edges). It tries to find an image that matches the scan data while 
+*The Logic: It assumes that real-world images are "piecewise constant" (smooth areas with sharp edges). It tries to find an image that matches the scan data while 
 minimizing "Total Variation" (noise).
 <br>
-Role in AI: It was the precursor to AI; it’s a "hand-crafted" rule rather than a learned one.
+*Role in AI: It was the precursor to AI; it’s a "hand-crafted" rule rather than a learned one.
 <br>
-Optimization-based reconstruction method
+*Optimization-based reconstruction method
 <br>
-Solves inverse problem: **y = Ax + ε**
+*Solves inverse problem: **y = Ax + ε**
    <br>
    {*y: The noisy sinogram (raw data).
    <br>
@@ -36,26 +36,26 @@ Solves inverse problem: **y = Ax + ε**
    <br>
    *ε: Noise}
 <br>
-Promotes smooth and noise free images while preserving edges
+*Promotes smooth and noise free images while preserving edges
 <br>
-Implemented using iterative optimization
+*Implemented using iterative optimization
 
 ### **3)Learned Primal Dual:** 
-This is firmly in the AIML domain.It is a **"Deep Physcis"** approach
+*This is firmly in the AIML domain.It is a **"Deep Physcis"** approach
 <br>
-How it works: It takes the classical mathematical optimization (Primal-Dual Hybrid Gradient) and "unrolls" it into a Neural Network. Instead of using hand-crafted math to remove noise, the network learns the best way to reconstruct the image from training data.
+*How it works: It takes the classical mathematical optimization (Primal-Dual Hybrid Gradient) and "unrolls" it into a Neural Network. Instead of using hand-crafted math to remove noise, the network learns the best way to reconstruct the image from training data.
 <br>
-Why it matters: It combines the reliability of physics with the power of AI, allowinguch lower radiation doses.
+*Why it matters: It combines the reliability of physics with the power of AI, allowinguch lower radiation doses.
 <br>
 **Note:**
 <br>
-Deep learning-based iterative reconstruction method
+*Deep learning-based iterative reconstruction method
 <br>
-Combines physics-based forward model with CNN updates
+*Combines physics-based forward model with CNN updates
 <br>
-Alternates between primal (image) and dual (data) updates
+*Alternates between primal (image) and dual (data) updates
 <br>
-Achieves superior reconstruction quality
+*Achieves superior reconstruction quality
 
 ## Results
 | Method | PSNR | SSIM |
@@ -69,4 +69,13 @@ This project uses the LoDoPaB-CT dataset.
 **Dataset link:** [https://zenodo.org/records/3384092](https://zenodo.org/records/3384092)
 <br>
 Note: Dataset is not included due to large size.
+
+##Author:
+<br>
+**Team Leader:**Anem GnanaGanesh
+<br>
+**Team Member 1:**Annam Yogitha
+<br>
+**Team Member 2:**Chintamani Manoj Ram Sai
+
 
