@@ -2,7 +2,7 @@
 
 ## Overview
 <br>
-*This project focuses on enhancing low-dose CT images using advanced reconstruction techniques on the LoDoPaB-CT dataset.
+* This project focuses on enhancing low-dose CT images using advanced reconstruction techniques on the LoDoPaB-CT dataset.
 <br>
 *Total Variation  Regularization
 <br>
@@ -71,10 +71,10 @@ This project uses the LoDoPaB-CT dataset.
 Note: Dataset is not included due to large size.
 
 ## Team:
-**Team Leader:**Anem GnanaGanesh
+**Team Leader:** Anem GnanaGanesh
 <br>
-**Team Member 1:**Annam Yogitha
+**Team Member 1:** Annam Yogitha
 <br>
-**Team Member 2:**Chintamani Manoj Ram Sai
+**Team Member 2:** Chintamani Manoj Ram Sai
 
 
