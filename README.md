@@ -41,6 +41,14 @@ Promotes smooth and noise free images while preserving edges
 Implemented using iterative optimization
 
 ### **3)Learned Primal Dual:** 
+This is firmly in the AIML domain.It is a **"Deep Physcis"** approach
+<br>
+How it works: It takes the classical mathematical optimization (Primal-Dual Hybrid Gradient) and "unrolls" it into a Neural Network. Instead of using hand-crafted math to remove noise, the network learns the best way to reconstruct the image from training data.
+<br>
+Why it matters: It combines the reliability of physics with the power of AI, allowinguch lower radiation doses.
+<br>
+**Note:**
+<br>
 Deep learning-based iterative reconstruction method
 <br>
 Combines physics-based forward model with CNN updates
