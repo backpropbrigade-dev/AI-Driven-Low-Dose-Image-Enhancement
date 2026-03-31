@@ -70,7 +70,7 @@ This project uses the LoDoPaB-CT dataset.
 <br>
 Note: Dataset is not included due to large size.
 
-## Author's:
+## Team:
 <br>
 **Team Leader:**Anem GnanaGanesh
 <br>
