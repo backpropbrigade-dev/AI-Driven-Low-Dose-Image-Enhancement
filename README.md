@@ -2,7 +2,7 @@
 
 ## Overview
 <br>
-* This project focuses on enhancing low-dose CT images using advanced reconstruction techniques on the LoDoPaB-CT dataset.
+*This project focuses on enhancing low-dose CT images using advanced reconstruction techniques on the LoDoPaB-CT dataset.
 <br>
 *Total Variation  Regularization
 <br>
