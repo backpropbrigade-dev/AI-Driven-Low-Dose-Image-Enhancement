@@ -1,0 +1,22 @@
+Steps while working in Anaconda Promt:
+1)Open Anaconda Prompt.
+
+2)Navigate to the folder where you saved environment.yml:
+cd path/to/your/folder
+
+3)Create the environment:
+conda env create -f environment.yml
+
+4)Activate it:
+conda activate lodopab_env
+
+Steps while working in Juypter Notebook:
+1)Activate the env: conda activate lodopab_env
+
+2)Install the kernel:
+conda install ipykernel
+python -m ipykernel install --user --name lodopab_env --display-name "Python (LoDoPaB)"
+
+3)Open Jupyter: jupyter notebook
+
+4)In the top right menu, go to Kernel > Change Kernel and select "Python (LoDoPaB)".

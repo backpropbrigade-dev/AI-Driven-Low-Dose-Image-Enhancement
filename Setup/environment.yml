@@ -1,0 +1,22 @@
+name: lodopab_env
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - astra-toolbox
+  - default
+dependencies:
+  - python=3.10
+  - pip
+  - numpy
+  - h5py
+  - tqdm
+  - matplotlib
+  - scikit-image
+  - pytorch
+  - torchvision
+  - pytorch-cuda=11.8  # Change to your specific CUDA version if necessary
+  - astra-toolbox
+  - odl
+  - pip:
+      - dival
