@@ -66,7 +66,7 @@ Your scripts use impl="astra_cuda". Ensure you have an NVIDIA GPU and that astra
 <br>
 Ensure the directories in your scripts (e.g., /DATA/biomedical/... or /DATA/Nith/...) exist on your machine. If you are on Windows, remember to use double backslashes \\ or raw strings r"C:\DATA\..." for paths.
 <br>
-**Memory Management: **
+**Memory Management:**
 <br>
 Primal-Dual networks and TV-reconstruction can be memory-intensive. If you encounter "Out of Memory" (OOM) errors, try reducing the batch_size to 1 (which it appears to be already) or reducing the iterations in the TV script for testing.
 <br>
