@@ -58,11 +58,17 @@ minimizing "Total Variation" (noise).
 *Achieves superior reconstruction quality
 
 ## Hardware & Path Setup Tips
-**GPU Acceleration:** Your scripts use impl="astra_cuda". Ensure you have an NVIDIA GPU and that astra-toolbox is properly recognizing your drivers. You can check this by running import astra; print(astra.test()) in Python.
+**GPU Acceleration:**
 <br>
-**Data Paths:** Ensure the directories in your scripts (e.g., /DATA/biomedical/... or /DATA/Nith/...) exist on your machine. If you are on Windows, remember to use double backslashes \\ or raw strings r"C:\DATA\..." for paths.
+Your scripts use impl="astra_cuda". Ensure you have an NVIDIA GPU and that astra-toolbox is properly recognizing your drivers. You can check this by running import astra; print(astra.test()) in Python.
 <br>
-**Memory Management: **Primal-Dual networks and TV-reconstruction can be memory-intensive. If you encounter "Out of Memory" (OOM) errors, try reducing the batch_size to 1 (which it appears to be already) or reducing the iterations in the TV script for testing.
+**Data Paths:**
+<br>
+Ensure the directories in your scripts (e.g., /DATA/biomedical/... or /DATA/Nith/...) exist on your machine. If you are on Windows, remember to use double backslashes \\ or raw strings r"C:\DATA\..." for paths.
+<br>
+**Memory Management: **
+<br>
+Primal-Dual networks and TV-reconstruction can be memory-intensive. If you encounter "Out of Memory" (OOM) errors, try reducing the batch_size to 1 (which it appears to be already) or reducing the iterations in the TV script for testing.
 <br>
 Note: If you encounter an error regarding dival during installation, ensure your pip is up to date within the environment by running python -m pip install --upgrade pip.
 
