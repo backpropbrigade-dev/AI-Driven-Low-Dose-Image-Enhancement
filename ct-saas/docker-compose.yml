@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  api:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+
+  # Optional: uncomment for local nginx frontend serving
+  # frontend:
+  #   image: nginx:alpine
+  #   ports:
+  #     - "3000:80"
+  #   volumes:
+  #     - ./frontend:/usr/share/nginx/html:ro
