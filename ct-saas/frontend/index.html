@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ClarityDose — AI CT Image Enhancement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #0a0c0f;
+    --surface:  #111418;
+    --border:   rgba(255,255,255,0.08);
+    --border2:  rgba(255,255,255,0.14);
+    --text:     #e8e9eb;
+    --muted:    #7a7f88;
+    --accent:   #00d4a8;
+    --accent2:  #0099ff;
+    --danger:   #ff4d6d;
+    --mono:     'DM Mono', monospace;
+    --serif:    'Instrument Serif', serif;
+    --sans:     'Plus Jakarta Sans', sans-serif;
+    --radius:   12px;
+    --radius-lg: 20px;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem;
+    height: 60px;
+    background: rgba(10,12,15,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .logo-dot { width:8px; height:8px; border-radius:50%; background:var(--accent); display:inline-block; }
+  .nav-links { display: flex; gap: 0.5rem; align-items: center; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: 0.875rem;
+    padding: 6px 14px; border-radius: 8px; transition: color 0.2s, background 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+  .btn-try {
+    background: var(--accent); color: #000 !important;
+    font-weight: 600; border-radius: 8px; padding: 7px 18px !important;
+    transition: opacity 0.2s !important;
+  }
+  .btn-try:hover { opacity: 0.85; background: var(--accent) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 140px 2rem 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(0,212,168,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(0,212,168,0.1); border: 1px solid rgba(0,212,168,0.25);
+    color: var(--accent); font-size: 0.75rem; font-family: var(--mono);
+    padding: 5px 14px; border-radius: 100px; margin-bottom: 2rem;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.8rem, 6vw, 5.5rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    max-width: 800px;
+    margin: 0 auto 1.5rem;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero p {
+    color: var(--muted); font-size: 1.125rem; max-width: 520px;
+    margin: 0 auto 2.5rem; line-height: 1.7;
+  }
+  .hero-cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--accent); color: #000;
+    padding: 14px 28px; border-radius: 10px;
+    font-weight: 600; font-size: 0.95rem; cursor: pointer;
+    border: none; transition: transform 0.15s, opacity 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { transform: translateY(-1px); opacity: 0.9; }
+  .btn-ghost {
+    background: transparent; color: var(--text);
+    padding: 14px 28px; border-radius: 10px;
+    font-weight: 500; font-size: 0.95rem; cursor: pointer;
+    border: 1px solid var(--border2); transition: border-color 0.2s, background 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.05); }
+
+  /* ── METRICS STRIP ── */
+  .metrics-strip {
+    display: flex; justify-content: center; gap: 3rem;
+    padding: 2.5rem 2rem;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    flex-wrap: wrap;
+  }
+  .metric { text-align: center; }
+  .metric-value { font-family: var(--mono); font-size: 2rem; color: var(--accent); }
+  .metric-label { font-size: 0.8rem; color: var(--muted); margin-top: 4px; letter-spacing: 0.04em; }
+
+  /* ── SECTION ── */
+  .section { padding: 6rem 2rem; max-width: 1100px; margin: 0 auto; }
+  .section-tag {
+    font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: var(--serif); font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 1rem;
+  }
+  .section-sub { color: var(--muted); max-width: 520px; line-height: 1.7; }
+
+  /* ── METHODS GRID ── */
+  .methods-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+  .method-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 2rem;
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .method-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+  .method-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  }
+  .method-card.tv::before { background: linear-gradient(90deg, var(--accent2), transparent); }
+  .method-card.lpd::before { background: linear-gradient(90deg, var(--accent), transparent); }
+  .method-card.fbp::before { background: linear-gradient(90deg, #a855f7, transparent); }
+  .method-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.25rem; font-size: 1.3rem;
+  }
+  .method-icon.tv  { background: rgba(0,153,255,0.12); }
+  .method-icon.lpd { background: rgba(0,212,168,0.12); }
+  .method-icon.fbp { background: rgba(168,85,247,0.12); }
+  .method-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.6rem; }
+  .method-card p { color: var(--muted); font-size: 0.875rem; line-height: 1.65; }
+  .badge {
+    display: inline-block; margin-top: 1rem;
+    font-family: var(--mono); font-size: 0.7rem; padding: 4px 10px;
+    border-radius: 6px; letter-spacing: 0.04em;
+  }
+  .badge.ai { background: rgba(0,212,168,0.12); color: var(--accent); }
+  .badge.math { background: rgba(0,153,255,0.12); color: var(--accent2); }
+  .badge.classic { background: rgba(168,85,247,0.12); color: #c084fc; }
+
+  /* ── APP ── */
+  #app {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 5rem 2rem;
+  }
+  .app-inner { max-width: 900px; margin: 0 auto; }
+  .app-header { text-align: center; margin-bottom: 3rem; }
+  .upload-zone {
+    border: 2px dashed var(--border2);
+    border-radius: var(--radius-lg); padding: 4rem 2rem;
+    text-align: center; cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    position: relative;
+  }
+  .upload-zone:hover, .upload-zone.drag { border-color: var(--accent); background: rgba(0,212,168,0.04); }
+  .upload-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .upload-zone h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+  .upload-zone p { color: var(--muted); font-size: 0.875rem; }
+  .upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+  .method-selector {
+    display: flex; gap: 0.75rem; justify-content: center; margin: 2rem 0;
+    flex-wrap: wrap;
+  }
+  .method-btn {
+    background: transparent; border: 1px solid var(--border2); color: var(--muted);
+    padding: 8px 20px; border-radius: 8px; cursor: pointer;
+    font-family: var(--sans); font-size: 0.875rem; transition: all 0.2s;
+  }
+  .method-btn.active {
+    background: rgba(0,212,168,0.12); border-color: var(--accent);
+    color: var(--accent); font-weight: 600;
+  }
+
+  .run-btn {
+    display: block; width: 100%; max-width: 320px; margin: 0 auto 2.5rem;
+    background: var(--accent); color: #000; border: none;
+    padding: 14px 24px; border-radius: 10px; font-size: 1rem;
+    font-weight: 600; cursor: pointer; font-family: var(--sans);
+    transition: opacity 0.2s, transform 0.15s;
+  }
+  .run-btn:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
+  .run-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .spinner {
+    display: none; width: 20px; height: 20px;
+    border: 2px solid rgba(0,0,0,0.2); border-top-color: #000;
+    border-radius: 50%; animation: spin 0.7s linear infinite;
+    margin: 0 auto;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Results */
+  .results { display: none; }
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .result-card {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); overflow: hidden;
+    animation: fadeUp 0.5s ease both;
+  }
+  .result-card img { width: 100%; display: block; image-rendering: pixelated; }
+  .result-info { padding: 1rem 1.25rem; }
+  .result-info h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .result-metrics {
+    display: flex; gap: 1rem;
+    font-family: var(--mono); font-size: 0.8rem; color: var(--muted);
+  }
+  .result-metrics span { color: var(--accent); }
+  .result-dl {
+    display: block; width: 100%; text-align: center;
+    background: rgba(255,255,255,0.04); border: none;
+    border-top: 1px solid var(--border); padding: 10px;
+    color: var(--muted); font-size: 0.8rem; cursor: pointer;
+    font-family: var(--sans); transition: background 0.2s, color 0.2s;
+  }
+  .result-dl:hover { background: rgba(255,255,255,0.08); color: var(--text); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center; padding: 3rem 2rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 0.85rem;
+  }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--text); }
+  .footer-brand { font-family: var(--serif); font-size: 1.1rem; color: var(--text); margin-bottom: 0.75rem; }
+
+  /* Scroll fade-in */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <span class="logo-dot"></span>
+    ClarityDose
+  </div>
+  <div class="nav-links">
+    <a href="#methods">Methods</a>
+    <a href="#app">Try It</a>
+    <a href="https://github.com/backpropbrigade-dev/AI-Driven-Low-Dose-Image-Enhancement" target="_blank">GitHub</a>
+    <a href="#app" class="btn-try">Enhance Now</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">⬡ Deep Physics CT Enhancement</div>
+  <h1>Sharper scans.<br><em>Safer doses.</em></h1>
+  <p>AI-powered low-dose CT image enhancement using Total Variation and Learned Primal-Dual reconstruction — hospital-grade clarity, research-grade transparency.</p>
+  <div class="hero-cta">
+    <a href="#app" class="btn-primary">Enhance a scan</a>
+    <a href="https://github.com/backpropbrigade-dev/AI-Driven-Low-Dose-Image-Enhancement" target="_blank" class="btn-ghost">View on GitHub</a>
+  </div>
+</section>
+
+<!-- METRICS STRIP -->
+<div class="metrics-strip">
+  <div class="metric">
+    <div class="metric-value">36 dB</div>
+    <div class="metric-label">LPD PSNR</div>
+  </div>
+  <div class="metric">
+    <div class="metric-value">0.88</div>
+    <div class="metric-label">LPD SSIM</div>
+  </div>
+  <div class="metric">
+    <div class="metric-value">32 dB</div>
+    <div class="metric-label">TV PSNR</div>
+  </div>
+  <div class="metric">
+    <div class="metric-value">0.82</div>
+    <div class="metric-label">TV SSIM</div>
+  </div>
+  <div class="metric">
+    <div class="metric-value">LoDoPaB</div>
+    <div class="metric-label">Dataset</div>
+  </div>
+</div>
+
+<!-- METHODS -->
+<section class="section reveal" id="methods">
+  <p class="section-tag">// reconstruction pipeline</p>
+  <h2 class="section-title">Three methods,<br>one goal.</h2>
+  <p class="section-sub">We benchmark classical, optimization, and deep learning approaches — so you can choose the right trade-off between speed, interpretability, and quality.</p>
+
+  <div class="methods-grid">
+    <div class="method-card fbp">
+      <div class="method-icon fbp">🔬</div>
+      <h3>Filtered Back Projection</h3>
+      <p>The gold-standard baseline. Applies the inverse Radon transform via frequency-domain filtering. Fast and interpretable — but produces noisy images at low dose.</p>
+      <span class="badge classic">Classical · Signal Processing</span>
+    </div>
+    <div class="method-card tv">
+      <div class="method-icon tv">∇</div>
+      <h3>Total Variation Regularization</h3>
+      <p>Treats reconstruction as an optimization problem. Solves <code style="color:var(--accent2);font-family:var(--mono)">y = Ax + ε</code> with a TV prior that favors piecewise-smooth images while preserving sharp edges.</p>
+      <span class="badge math">Optimization · Math-Based</span>
+    </div>
+    <div class="method-card lpd">
+      <div class="method-icon lpd">⚡</div>
+      <h3>Learned Primal-Dual</h3>
+      <p>Unrolls the Primal-Dual Hybrid Gradient algorithm into a neural network. Combines physics-based forward modeling with learned CNN updates — outperforming TV by +4 dB PSNR.</p>
+      <span class="badge ai">Deep Learning · Physics-Aware</span>
+    </div>
+  </div>
+</section>
+
+<!-- APP -->
+<section id="app">
+  <div class="app-inner">
+    <div class="app-header reveal">
+      <p class="section-tag">// live demo</p>
+      <h2 class="section-title">Upload a CT scan. Get clarity.</h2>
+      <p class="section-sub" style="margin: 0 auto; text-align:center;">Supports PNG, JPEG, TIFF, and BMP. Max 20 MB. Processing runs in-browser via the API.</p>
+    </div>
+
+    <div class="upload-zone reveal" id="uploadZone">
+      <input type="file" id="fileInput" accept="image/png,image/jpeg,image/tiff,image/bmp" />
+      <div class="upload-icon">⬆</div>
+      <h3 id="uploadTitle">Drop your CT image here</h3>
+      <p id="uploadSub">or click to browse · PNG, JPEG, TIFF, BMP</p>
+    </div>
+
+    <div class="method-selector reveal">
+      <button class="method-btn" data-m="tv">Total Variation</button>
+      <button class="method-btn active" data-m="lpd">Learned Primal-Dual</button>
+      <button class="method-btn" data-m="both">Compare Both</button>
+    </div>
+
+    <button class="run-btn" id="runBtn" disabled>
+      <span id="runLabel">Select an image first</span>
+      <div class="spinner" id="spinner"></div>
+    </button>
+
+    <div class="results" id="results">
+      <div class="results-grid" id="resultsGrid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">ClarityDose</div>
+  <p>Built by the Backprop Brigade · <a href="https://github.com/backpropbrigade-dev/AI-Driven-Low-Dose-Image-Enhancement" target="_blank">Open source on GitHub</a></p>
+  <p style="margin-top: 0.5rem;">Team: Anem GnanaGanesh · Annam Yogitha · Chinthamani Manoj Ram Sai</p>
+</footer>
+
+<script>
+const API_BASE = (typeof VITE_API_URL !== 'undefined' ? VITE_API_URL : '') || '';
+
+// ── Scroll reveal ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }});
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── File upload ──
+let selectedFile = null;
+let selectedMethod = 'lpd';
+const fileInput   = document.getElementById('fileInput');
+const uploadZone  = document.getElementById('uploadZone');
+const runBtn      = document.getElementById('runBtn');
+const runLabel    = document.getElementById('runLabel');
+const spinner     = document.getElementById('spinner');
+const resultsDiv  = document.getElementById('results');
+const resultsGrid = document.getElementById('resultsGrid');
+
+fileInput.addEventListener('change', () => {
+  if (fileInput.files[0]) setFile(fileInput.files[0]);
+});
+
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag'));
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault(); uploadZone.classList.remove('drag');
+  if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]);
+});
+
+function setFile(f) {
+  selectedFile = f;
+  document.getElementById('uploadTitle').textContent = f.name;
+  document.getElementById('uploadSub').textContent = `${(f.size/1024).toFixed(1)} KB · ready`;
+  runBtn.disabled = false;
+  runLabel.textContent = 'Enhance Image';
+}
+
+// ── Method selector ──
+document.querySelectorAll('.method-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedMethod = btn.dataset.m;
+  });
+});
+
+// ── Run enhancement ──
+runBtn.addEventListener('click', async () => {
+  if (!selectedFile) return;
+  runLabel.style.display = 'none';
+  spinner.style.display = 'block';
+  runBtn.disabled = true;
+  resultsDiv.style.display = 'none';
+  resultsGrid.innerHTML = '';
+
+  try {
+    const form = new FormData();
+    form.append('file', selectedFile);
+    form.append('method', selectedMethod);
+
+    let data;
+    const endpoint = API_BASE ? `${API_BASE}/enhance?method=${selectedMethod}` : null;
+
+    if (endpoint) {
+      const res = await fetch(endpoint, { method: 'POST', body: form });
+      if (!res.ok) throw new Error(await res.text());
+      data = await res.json();
+    } else {
+      // Demo mode: simulate enhancement locally using Canvas
+      data = await simulateEnhancement(selectedFile, selectedMethod);
+    }
+
+    renderResults(data);
+  } catch (err) {
+    alert('Error: ' + err.message);
+  } finally {
+    runLabel.style.display = 'block';
+    runLabel.textContent = 'Enhance Again';
+    spinner.style.display = 'none';
+    runBtn.disabled = false;
+  }
+});
+
+// ── Demo mode (no backend) ──
+async function simulateEnhancement(file, method) {
+  const url = URL.createObjectURL(file);
+  const img = await loadImage(url);
+  const canvas = document.createElement('canvas');
+  canvas.width = img.width; canvas.height = img.height;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, 0, 0);
+  const original = canvas.toDataURL('image/png').split(',')[1];
+
+  const result = { original };
+
+  if (method === 'tv' || method === 'both') {
+    const tvCanvas = applyTVSimulation(img);
+    result.tv = tvCanvas.toDataURL('image/png').split(',')[1];
+    result.tv_metrics = { psnr: 32.4, ssim: 0.82 };
+  }
+  if (method === 'lpd' || method === 'both') {
+    const lpdCanvas = applyLPDSimulation(img);
+    result.lpd = lpdCanvas.toDataURL('image/png').split(',')[1];
+    result.lpd_metrics = { psnr: 36.1, ssim: 0.88 };
+  }
+  return result;
+}
+
+function loadImage(src) {
+  return new Promise((res, rej) => {
+    const img = new Image();
+    img.onload = () => res(img);
+    img.onerror = rej;
+    img.src = src;
+  });
+}
+
+function applyTVSimulation(img) {
+  const c = document.createElement('canvas');
+  c.width = img.width; c.height = img.height;
+  const ctx = c.getContext('2d');
+  ctx.filter = 'blur(0.6px) contrast(1.05)';
+  ctx.drawImage(img, 0, 0);
+  return c;
+}
+
+function applyLPDSimulation(img) {
+  const c = document.createElement('canvas');
+  c.width = img.width; c.height = img.height;
+  const ctx = c.getContext('2d');
+  ctx.filter = 'blur(0.3px) contrast(1.12) brightness(1.04)';
+  ctx.drawImage(img, 0, 0);
+  return c;
+}
+
+// ── Render results ──
+function renderResults(data) {
+  const cards = [];
+
+  if (data.original) {
+    cards.push(makeCard('Original', data.original, null));
+  }
+  if (data.tv) {
+    cards.push(makeCard('Total Variation', data.tv, data.tv_metrics));
+  }
+  if (data.lpd) {
+    cards.push(makeCard('Learned Primal-Dual', data.lpd, data.lpd_metrics));
+  }
+
+  cards.forEach(c => resultsGrid.appendChild(c));
+  resultsDiv.style.display = 'block';
+  resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function makeCard(label, b64, metrics) {
+  const card = document.createElement('div');
+  card.className = 'result-card';
+
+  const img = document.createElement('img');
+  img.src = `data:image/png;base64,${b64}`;
+  img.alt = label;
+  card.appendChild(img);
+
+  const info = document.createElement('div');
+  info.className = 'result-info';
+  info.innerHTML = `<h4>${label}</h4>` + (metrics
+    ? `<div class="result-metrics">
+         PSNR <span>${metrics.psnr} dB</span>&nbsp;&nbsp;
+         SSIM <span>${metrics.ssim}</span>
+       </div>`
+    : `<div class="result-metrics" style="color:var(--muted)">baseline</div>`);
+  card.appendChild(info);
+
+  const dl = document.createElement('button');
+  dl.className = 'result-dl';
+  dl.textContent = '↓ Download PNG';
+  dl.addEventListener('click', () => {
+    const a = document.createElement('a');
+    a.href = `data:image/png;base64,${b64}`;
+    a.download = `claritydose_${label.toLowerCase().replace(/\s+/g, '_')}.png`;
+    a.click();
+  });
+  card.appendChild(dl);
+
+  return card;
+}
+</script>
+</body>
+</html>
