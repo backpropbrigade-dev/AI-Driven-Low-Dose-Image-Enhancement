@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>AI Image Enhancement App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.59.0/build/stlite.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.59.0/build/stlite.js"></script>
+    <script>
+      stlite.mount(
+        {
+          requirements: ["pillow", "requests", "torchvision"], // Put your essential requirements.txt items here
+          entrypoint: "ui.py",
+          files: {
+            "ui.py": `
+# --- YOUR UI.PY CODE STARTS HERE ---
+import streamlit as st
+import io
+from PIL import Image
+
+st.title("✨ AI-Driven Low-Dose Image Enhancement")
+st.write("Running entirely on GitHub Pages via WebAssembly!")
+
+uploaded_file = st.file_uploader("Choose a low-dose image...", type=["png", "jpg", "jpeg"])
+if uploaded_file is not None:
+    image = Image.open(uploaded_file)
+    st.image(image, caption="Uploaded Image", use_container_width=True)
+    st.success("Ready for enhancement processing!")
+# --- YOUR UI.PY CODE ENDS HERE ---
+`,
+          },
+        },
+        document.getElementById("root")
+      );
+    </script>
+  </body>
+</html>
